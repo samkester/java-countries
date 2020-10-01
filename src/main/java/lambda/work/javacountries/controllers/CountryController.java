@@ -49,16 +49,11 @@ public class CountryController {
     @GetMapping(value = "/names/start/{initial}", produces = {"application/json"})
     public ResponseEntity<?> getNamesByInitial(@PathVariable char initial){
         List<Country> countries = new ArrayList<>();
-        List<String> result = new ArrayList<>();
+        List<Country> result = new ArrayList<>();
 
         countryRepository.findAll().iterator().forEachRemaining(countries::add);
 
-        countries = filterCountries(countries, c -> c.getName().charAt(0) == initial);
-
-        for(Country c : countries)
-        {
-            result.add(c.getName());
-        }
+        result = filterCountries(countries, c -> c.getName().charAt(0) == initial);
 
         return new ResponseEntity<>(result, HttpStatus.OK);
     }
@@ -76,7 +71,8 @@ public class CountryController {
             result += c.getPopulation();
         }
 
-        return new ResponseEntity<>(result, HttpStatus.OK);
+        System.out.println("Total population " + result);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     // http://localhost:5000/population/min
