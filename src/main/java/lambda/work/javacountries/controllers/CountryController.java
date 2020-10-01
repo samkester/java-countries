@@ -64,10 +64,54 @@ public class CountryController {
     }
 
     // http://localhost:5000/population/total
+    @GetMapping(value = "/population/total", produces = {"application/json"})
+    public ResponseEntity<?> getPopulationTotal(){
+        List<Country> countries = new ArrayList<>();
+        long result = 0;
+
+        countryRepository.findAll().iterator().forEachRemaining(countries::add);
+
+        for(Country c : countries)
+        {
+            result += c.getPopulation();
+        }
+
+        return new ResponseEntity<>(result, HttpStatus.OK);
+    }
 
     // http://localhost:5000/population/min
+    @GetMapping(value = "/population/min", produces = {"application/json"})
+    public ResponseEntity<?> getPopulationMin(){
+        List<Country> countries = new ArrayList<>();
+
+        countryRepository.findAll().iterator().forEachRemaining(countries::add);
+
+        countries.sort((first, second) -> (int)(first.getPopulation() - second.getPopulation()));
+
+        return new ResponseEntity<>(countries.get(0), HttpStatus.OK);
+    }
 
     // http://localhost:5000/population/max
+    @GetMapping(value = "/population/max", produces = {"application/json"})
+    public ResponseEntity<?> getPopulationMax(){
+        List<Country> countries = new ArrayList<>();
+
+        countryRepository.findAll().iterator().forEachRemaining(countries::add);
+
+        countries.sort((first, second) -> (int)(second.getPopulation() - first.getPopulation()));
+
+        return new ResponseEntity<>(countries.get(0), HttpStatus.OK);
+    }
 
     // http://localhost:5000/population/median
+    @GetMapping(value = "/population/median", produces = {"application/json"})
+    public ResponseEntity<?> getPopulationMedian(){
+        List<Country> countries = new ArrayList<>();
+
+        countryRepository.findAll().iterator().forEachRemaining(countries::add);
+
+        countries.sort((first, second) -> (int)(first.getPopulation() - second.getPopulation()));
+
+        return new ResponseEntity<>(countries.get(countries.size()/2), HttpStatus.OK);
+    }
 }
